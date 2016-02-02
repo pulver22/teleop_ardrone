@@ -68,9 +68,9 @@ def vels(speed,turn):
 if __name__=="__main__":
     	settings = termios.tcgetattr(sys.stdin)
 	
-	pub = rospy.Publisher('cmd_vel', Twist)
-	pubTake = rospy.Publisher('/ardrone/takeoff', Empty)
-	pubLand = rospy.Publisher('/ardrone/land', Empty)
+	pub_twist = rospy.Publisher('cmd_vel', Twist)
+	pub_empty_takeoff = rospy.Publisher('/ardrone/takeoff', Empty)
+	pub_empty_landing = rospy.Publisher('/ardrone/land', Empty)
 	rospy.init_node('teleop_ardrone_keyboard')
 
 	x = 0
@@ -99,11 +99,11 @@ if __name__=="__main__":
 					msg = "ciao"
 					print msg
 					# publish mex to take off
-					pubTake.publish(Empty());
+					pub_empty_takeoff.publish(Empty());
 					continue;
 				else:
 					#publish mex to landing
-					pubLand.publish(Empty());
+					pub_empty_landing.publish(Empty());
 					continue;
 			else:
 				x = 0
@@ -114,7 +114,7 @@ if __name__=="__main__":
 			twist = Twist()
 			twist.linear.x = x*speed; twist.linear.y = 0; twist.linear.z = 0
 			twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = th*turn
-			pub.publish(twist)
+			pub_twist.publish(twist)
 
 	except:
 		print e
