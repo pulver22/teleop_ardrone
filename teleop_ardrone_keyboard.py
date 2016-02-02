@@ -3,12 +3,17 @@ import roslib; roslib.load_manifest('teleop_twist_keyboard')
 import rospy
 
 from geometry_msgs.msg import Twist
+from std_msgs.msg import Empty
 
 import sys, select, termios, tty
 
 msg = """
 Reading from the keyboard  and Publishing to Twist!
 ---------------------------
+Taking off ==> Press 't'
+
+Landing ==> Press 'g'
+
 Moving around:
    u    i    o
    j    k    l
@@ -42,6 +47,11 @@ speedBindings={
 		'c':(1,.9),
 	      }
 
+landingTakingOff={
+		't':(0,0),
+		'g':(0,0),
+	      }
+
 def getKey():
 	tty.setraw(sys.stdin.fileno())
 	select.select([sys.stdin], [], [], 0)
@@ -59,7 +69,9 @@ if __name__=="__main__":
     	settings = termios.tcgetattr(sys.stdin)
 	
 	pub = rospy.Publisher('cmd_vel', Twist)
-	rospy.init_node('teleop_twist_keyboard')
+	pubTake = rospy.Publisher('/ardrone/takeoff', Empty)
+	pubLand = rospy.Publisher('/ardrone/land', Empty)
+	rospy.init_node('teleop_ardrone_keyboard')
 
 	x = 0
 	th = 0
@@ -81,6 +93,18 @@ if __name__=="__main__":
 				if (status == 14):
 					print msg
 				status = (status + 1) % 15
+			elif key in landingTakingOff.keys():
+				
+				if (key == 't'):
+					msg = "ciao"
+					print msg
+					# publish mex to take off
+					pubTake.publish(Empty());
+					continue;
+				else:
+					#publish mex to landing
+					pubLand.publish(Empty());
+					continue;
 			else:
 				x = 0
 				th = 0
