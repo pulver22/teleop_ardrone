@@ -1,6 +1,6 @@
 0.7.0 (2016-02-03)
 -----------------
-* Added linear speed on Z axis for up/down movements
+* Added linear speed on Y and Z axis for left/right and up/down movements
 
 0.6.0 (2016-02-01)
 -----------------

@@ -42,11 +42,15 @@ moveBindingsAxis = {
 		'.':(-1,0,0,0,0,1),
 		'm':(-1,0,0,0,0,-1),
 			
+		#Y axis
+			#linear
+		'4':(0,0,1,0,0,0),
+		'6':(0,0,-1,0,0,0),
 		
 		# Z axis
 			#linear
-		'v':(0,0,0,0,1,0),
-		'b':(0,0,0,0,-1,0),
+		'8':(0,0,0,0,1,0),
+		'2':(0,0,0,0,-1,0),
 			#angular
 		'j':(0,0,0,0,0,1),
 		'l':(0,0,0,0,0,-1),
@@ -91,7 +95,7 @@ if __name__=="__main__":
 	pub_empty_landing = rospy.Publisher('/ardrone/land', Empty)
 	rospy.init_node('teleop_ardrone_keyboard')
 
-	x =y = z = 0
+	x = y = z = 0
 	th_x = th_y = th_z = 0
 	status = 0
 
@@ -141,7 +145,7 @@ if __name__=="__main__":
 			twist.linear.x = x*speed; twist.linear.y = y*speed; twist.linear.z = z*speed
 			twist.angular.x = th_x*turn; twist.angular.y = th_y*turn; twist.angular.z = th_z*turn
 			pub_twist.publish(twist)
-			
+			print key
 
 	except:
 		print e
