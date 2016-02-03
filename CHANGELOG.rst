@@ -1,6 +1,6 @@
-0.7.0 (2016-02-01)
+0.7.0 (2016-02-03)
 -----------------
-* Added taking off and landing
+* Added linear speed on Z axis for up/down movements
 
 0.6.0 (2016-02-01)
 -----------------
