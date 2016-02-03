@@ -1,3 +1,7 @@
+0.7.0 (2016-02-01)
+-----------------
+* Added taking off and landing
+
 0.6.0 (2016-02-01)
 -----------------
 * Added taking off and landing
