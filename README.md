@@ -3,7 +3,7 @@ Generic Keyboard Teleop for AR Drone (ROS)
 #Launch
 To run: `rosrun teleop_ardrone_keyboard teleop_ardrone_keyboard.py`
 
-[![Everything Is AWESOME](http://img.youtube.com/vi/5HnVKdOKKDg/0.jpg)](https://www.youtube.com/watch?v=5HnVKdOKKDg "Everything Is AWESOME")
+[![Flying Is AWESOME](http://imgur.com/0CjT2V6)](https://www.youtube.com/watch?v=5HnVKdOKKDg "Flying Is AWESOME")
 
 #Changelog
 ##Version 0.7.0
