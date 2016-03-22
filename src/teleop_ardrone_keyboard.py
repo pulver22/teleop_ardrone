@@ -10,21 +10,13 @@ import sys, select, termios, tty
 msg = """
 Reading from the keyboard  and Publishing to Twist!
 ---------------------------
-Taking off ==> Press 't'
-
-Landing ==> Press 'g'
-
-Moving around on X:
-   u    i    o
-   j    k    l
-   m    ,    .
-
-Moving around on Y:
-   4	     6
-
-Moving around on Z:
-        8
-	2
+up/down:       move forward/backward
+left/right:    move left/right
+w/s:           increase/decrease altitude
+a/d:           turn left/right
+t/l:           takeoff/land
+r:             reset (toggle emergency state)
+anything else: stop
 
 q/z : increase/decrease max speeds by 10%
 w/x : increase/decrease only linear speed by 10%
@@ -36,49 +28,31 @@ CTRL-C to quit
 #each button is associated with a 6-dim tuple: (x,th_x,y,th_y,z,th_z)
 
 #(linear,angular) velocity on the three axis
-moveBindingsAxis = {
-		# X axis
-			#pure linear
-		'i':(1,0,0,0,0,0),
-		',':(-1,0,0,0,0,0),
-			#linear and angular(on Z)
-				#forward
-		'o':(1,0,0,0,0,-1),
-		'u':(1,0,0,0,0,1),
-				#backward
-		'.':(-1,0,0,0,0,1),
-		'm':(-1,0,0,0,0,-1),
-
-		#Y axis
-			#linear
-		'4':(0,0,1,0,0,0),
-		'6':(0,0,-1,0,0,0),
-
-		# Z axis
-			#linear
-		'8':(0,0,0,0,1,0),
-		'2':(0,0,0,0,-1,0),
-			#angular
-		'j':(0,0,0,0,0,1),
-		'l':(0,0,0,0,0,-1),
-
-		#reset
-		'k':(0,0,0,0,0,0)
+move_bindings = {
+		68:(0,0,-1,0,0,0,0), #left
+		67:(0,0,1,0,0,0,0), #right
+		65:(1,0,0,0,0,0,0), #forward
+		66:(-1,0,0,0,0,0), #back
+		'w':(0,0,0,0,1,0), #increase altitude
+		's':(0,0,0,0,-1,0), #decrease altitude
+		'a':(0,0,0,0,0,-1), #rotate left
+		'd':(0,0,0,0,0,1), #rotate right
 	       }
 
 #increase/decrease velocity on X axis
 speedBindingsAxis={
-		'q':(1.1,1.1), #increase linear and angular velocity
-		'z':(.9,.9), #decrease linear and angular velocity
-		'w':(1.1,1), #increase only linear vel
-		'x':(.9,1), #decrease only linear vel
-		'e':(1,1.1), #increase only rot vel
-		'c':(1,.9), #decrease only rot vel
+		'y':(1.1,1.1), #increase linear and angular velocity
+		'n':(.9,.9), #decrease linear and angular velocity
+		'u':(1.1,1), #increase only linear vel
+		'm':(.9,1), #decrease only linear vel
+		'i':(1,1.1), #increase only rot vel
+		',':(1,.9), #decrease only rot vel
 	      }
 
-landingTakingOff={
+landingTakingOffReset={
 		't':(0,0),
-		'g':(0,0),
+		'l':(0,0),
+		'r':(0,0),
 	      }
 
 def getKey():
@@ -131,11 +105,16 @@ if __name__=="__main__":
 					print msg
 				status = (status + 1) % 15
 
-			elif key in landingTakingOff.keys():
+			elif key in landingTakingOffReset.keys():
 
 				if (key == 't'):
 					# publish mex to take off
 					pub_empty_takeoff.publish(Empty());
+					continue;
+				else if (key == 'r'):
+					# publish mex to reset velocity and hoovering
+					reset = Twist();
+					pub_twist.publish(reset);
 					continue;
 				else:
 					#publish mex to landing
@@ -163,4 +142,4 @@ if __name__=="__main__":
 		twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = 0
 		pub_twist.publish(twist)
 
-    		termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+    	termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
