@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>teleop_ardrone_keyboard</name>
-  <version>0.6.0</version>
+  <version>0.8.0</version>
   <description>Generic keyboard teleop for ardrone robot based.</description>
 
   <maintainer email="namniart@gmail.com">Austin Hendrix - Twist teleop</maintainer>
@@ -14,7 +14,7 @@
   <author>Graylin Trevor Jay</author>
 
   <buildtool_depend>catkin</buildtool_depend>
-	
+
   <run_depend>geometry_msgs</run_depend>
   <run_depend>rospy</run_depend>
 </package>

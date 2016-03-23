@@ -1,0 +1,9 @@
+<launch>
+
+    <!-- Start the keyboard control -->
+    <node name="teleop_ardrone_teleop" pkg="teleop_ardrone_keyboard" type="teleop_ardrone_keyboard.py" output="screen"/>
+
+    <!-- Start the 3d Mouse for driving control -->
+    <!--<node name="teleop_3d" pkg="drone_teleop_3d" type="ardrone_3d_teleop" />          -->
+
+</launch>

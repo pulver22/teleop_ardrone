@@ -17,26 +17,24 @@ a/d:           turn left/right
 t/l:           takeoff/land
 r:             reset (toggle emergency state)
 anything else: stop
-
-q/z : increase/decrease max speeds by 10%
-w/x : increase/decrease only linear speed by 10%
-e/c : increase/decrease only angular speed by 10%
+y/n : increase/decrease max speeds by 10%
+u/m : increase/decrease only linear speed by 10%
+i/, : increase/decrease only angular speed by 10%
 anything else : stop
-
 CTRL-C to quit
 """
 #each button is associated with a 6-dim tuple: (x,th_x,y,th_y,z,th_z)
 
 #(linear,angular) velocity on the three axis
-move_bindings = {
-		68:(0,0,-1,0,0,0,0), #left
-		67:(0,0,1,0,0,0,0), #right
+moveBindingsAxis = {
+		67:(0,0,-1,0,0,0,0), #left
+		68:(0,0,1,0,0,0,0), #right
 		65:(1,0,0,0,0,0,0), #forward
 		66:(-1,0,0,0,0,0), #back
 		'w':(0,0,0,0,1,0), #increase altitude
 		's':(0,0,0,0,-1,0), #decrease altitude
-		'a':(0,0,0,0,0,-1), #rotate left
-		'd':(0,0,0,0,0,1), #rotate right
+		'a':(0,0,0,0,0,1), #rotate left
+		'd':(0,0,0,0,0,-1), #rotate right
 	       }
 
 #increase/decrease velocity on X axis
@@ -49,7 +47,7 @@ speedBindingsAxis={
 		',':(1,.9), #decrease only rot vel
 	      }
 
-landingTakingOffReset={
+specialManoeuvre={
 		't':(0,0),
 		'l':(0,0),
 		'r':(0,0),
@@ -71,22 +69,27 @@ def vels(speed,turn):
 if __name__=="__main__":
     	settings = termios.tcgetattr(sys.stdin)
 
-	pub_twist = rospy.Publisher('cmd_vel', Twist, queue_size=10)
-	pub_empty_takeoff = rospy.Publisher('/ardrone/takeoff', Empty, queue_size=10)
-	pub_empty_landing = rospy.Publisher('/ardrone/land', Empty,queue_size=10)
+	pub_twist = rospy.Publisher('cmd_vel', Twist, queue_size=1)
+	pub_empty_takeoff = rospy.Publisher('/ardrone/takeoff', Empty, queue_size=1)
+	pub_empty_landing = rospy.Publisher('/ardrone/land', Empty,queue_size=1)
 	rospy.init_node('teleop_ardrone_keyboard')
 
-	x = y = z = 0
-	th_x = th_y = th_z = 0
-	status = 0
+
 
 	try:
 		print msg
 		print vels(speed,turn)
 		while(1):
+			x = y = z = 0
+			th_x = th_y = th_z = 0
+			status = 0
 			key = getKey()
-			if key in moveBindingsAxis.keys():
+			if ((ord(key) in moveBindingsAxis.keys()) or (key in moveBindingsAxis.keys())):
 				# x is linear speed, th is the angular one
+
+				if (ord(key) in moveBindingsAxis.keys()):
+					key = ord(key)
+
 				x = moveBindingsAxis[key][0]
 				th_x = moveBindingsAxis[key][1]
 				y = moveBindingsAxis[key][2]
@@ -105,20 +108,22 @@ if __name__=="__main__":
 					print msg
 				status = (status + 1) % 15
 
-			elif key in landingTakingOffReset.keys():
+			elif key in specialManoeuvre.keys():
 
 				if (key == 't'):
 					# publish mex to take off
 					pub_empty_takeoff.publish(Empty());
 					continue;
-				else if (key == 'r'):
-					# publish mex to reset velocity and hoovering
-					reset = Twist();
-					pub_twist.publish(reset);
-					continue;
-				else:
+				elif (key == 'l'):
 					#publish mex to landing
 					pub_empty_landing.publish(Empty());
+					continue;
+				else:
+					# publish mex to reset velocity and hoovering
+					twist = Twist()
+					twist.linear.x = 0; twist.linear.y = 0; twist.linear.z = 0
+					twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = 0
+					pub_twist.publish(twist)
 					continue;
 			else:
 				x = 0
@@ -131,7 +136,8 @@ if __name__=="__main__":
 			twist.linear.x = x*speed; twist.linear.y = y*speed; twist.linear.z = z*speed
 			twist.angular.x = th_x*turn; twist.angular.y = th_y*turn; twist.angular.z = th_z*turn
 			pub_twist.publish(twist)
-			print key
+
+			#print key
 
 	except:
 		print e
@@ -142,4 +148,4 @@ if __name__=="__main__":
 		twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = 0
 		pub_twist.publish(twist)
 
-    	termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+    		termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
