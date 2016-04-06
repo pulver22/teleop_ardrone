@@ -1,3 +1,7 @@
+0.9.0 (2016-04-06)
+-----------------
+* Added the support to spacenavigator device
+
 0.8.0 (2016-03-23)
 -----------------
 * Better key mapping and fixes on velocity
