@@ -1,4 +1,4 @@
-# teleop_ardrone
+# teleop_ardrone_keyboard
 Generic Keyboard and Spacenavigator Teleop for AR Drone (ROS)
 #Launch
 To run: `rosrun teleop_ardrone teleop_ardrone_keyboard.py`
