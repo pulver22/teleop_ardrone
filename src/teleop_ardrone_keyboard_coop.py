@@ -70,8 +70,8 @@ if __name__=="__main__":
     	settings = termios.tcgetattr(sys.stdin)
 
 	pub_twist = rospy.Publisher('/uav1/cmd_vel', Twist, queue_size=1)
-	pub_empty_takeoff = rospy.Publisher('/ardrone/takeoff', Empty, queue_size=1)
-	pub_empty_landing = rospy.Publisher('/ardrone/land', Empty,queue_size=1)
+	pub_empty_takeoff = rospy.Publisher('/uav1/takeoff', Empty, queue_size=1)
+	pub_empty_landing = rospy.Publisher('/uav1/land', Empty,queue_size=1)
 	rospy.init_node('teleop_ardrone_keyboard')
 
 
