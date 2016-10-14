@@ -37,7 +37,7 @@
 
     <!-- Start the visualizer -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find ar_pose)/launch/live_reverse.rviz"/>
-    
+
     <!-- Start the ar_marker detection node -->
     <node name="ar_pose" pkg="ar_pose" type="ar_single" respawn="false" output="screen">
         <param name="marker_pattern" type="string" value="data/4x4/4x4_1.patt"/>
@@ -50,6 +50,6 @@
     </node>
 
     <!-- Start the keyboard control -->
-    <node name="teleop_ardrone_teleop" pkg="teleop_ardrone_keyboard" type="teleop_ardrone_keyboard.py" output="screen" launch-prefix="xterm -e"/>
+    <node name="teleop_ardrone_teleop" pkg="teleop_ardrone" type="teleop_ardrone_keyboard.py" output="screen" launch-prefix="xterm -e"/>
 
 </launch>

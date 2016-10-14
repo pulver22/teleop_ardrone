@@ -38,7 +38,7 @@
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find ar_pose)/launch/live_reverse.rviz"/>
 
     <!-- Start the keyboard control -->
-    <node name="teleop_ardrone_teleop" pkg="teleop_ardrone_keyboard" type="teleop_ardrone_keyboard.py" output="screen" launch-prefix="xterm -e"/>
+    <node name="teleop_ardrone_teleop" pkg="teleop_ardrone" type="teleop_ardrone_keyboard.py" output="screen" launch-prefix="xterm -e"/>
 
     <!-- Start the 3d Mouse for driving control -->
     <!--<node name="teleop_3d" pkg="drone_teleop_3d" type="ardrone_3d_teleop" />          -->
