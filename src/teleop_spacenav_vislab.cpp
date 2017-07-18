@@ -39,7 +39,7 @@
 #include "spnav.h"
 #include <ros/ros.h>
 #include <stdio.h>
-
+#include "deep_reinforced_landing/SendCommand.h"
 #include "std_msgs/Empty.h"
 
 #define FULL_SCALE (350.0)
@@ -56,16 +56,20 @@ int main(int argc, char** argv)
   // ros::Publisher rot_offset_pub =
   // node_handle.advertise<geometry_msgs::Vector3>("spacenav/rot_offset", 2);
   ros::Publisher twist_pub =
-      node_handle.advertise<geometry_msgs::Twist>("cmd_vel", 2);
+      node_handle.advertise<geometry_msgs::Twist>("/quadrotor/cmd_vel", 2);
   // ros::Publisher joy_pub = node_handle.advertise<joy::Joy>("spacenav/joy",
   // 2);
 
   ros::Publisher land_pub =
-      node_handle.advertise<std_msgs::Empty>("ardrone/land", 2);
+      node_handle.advertise<std_msgs::Empty>("/quadrotor/ardrone/land", 2);
   ros::Publisher takeoff_pub =
-      node_handle.advertise<std_msgs::Empty>("ardrone/takeoff", 2);
+      node_handle.advertise<std_msgs::Empty>("/quadrotor/ardrone/takeoff", 2);
   ros::Publisher reset_pub =
-      node_handle.advertise<std_msgs::Empty>("ardrone/reset", 2);
+      node_handle.advertise<std_msgs::Empty>("/quadrotor/ardrone/reset", 2);
+  ros::ServiceClient drl_client = nh.serviceClient<DeepReinforcedLanding::sendCommand> ( "/drl/send_command" );
+  DeepReinforcedLanding::sendCommand req;
+  req = "land";
+  DeepReinforcedLanding::sendCommand res;
 
   if (spnav_open() == -1)
   {
@@ -145,7 +149,8 @@ int main(int argc, char** argv)
           break;
 
         case 1:
-          land_pub.publish(empty_msg);
+          ros::service::call<>("/drl/send_command", req, res );
+          //land_pub.publish(empty_msg);
           ROS_INFO("The drone is landing");
           break;
 

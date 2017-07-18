@@ -35,7 +35,7 @@
 
     </node>
 
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find ar_pose)/launch/live_reverse.rviz"/>
+    <!--<node pkg="rviz" type="rviz" name="rviz" args="-d $(find ar_pose)/launch/live_reverse.rviz"/>-->
 
     <!-- Start the keyboard control -->
     <node name="teleop_ardrone_teleop" pkg="teleop_ardrone" type="teleop_ardrone_keyboard.py" output="screen" launch-prefix="xterm -e"/>

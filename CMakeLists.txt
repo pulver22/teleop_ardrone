@@ -26,8 +26,14 @@ include_directories(
 )
 
 add_executable(teleop_ardrone_spacenav src/teleop_ardrone_spacenav.cpp)
+add_executable(teleop_spacenav_vislab src/teleop_spacenav_vislab.cpp)
 
 target_link_libraries(teleop_ardrone_spacenav
    ${catkin_LIBRARIES}
    spnav
  )
+ 
+target_link_libraries(teleop_spacenav_vislab
+ ${catkin_LIBRARIES}
+ spnav
+)
